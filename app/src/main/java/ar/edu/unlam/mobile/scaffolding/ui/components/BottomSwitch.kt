@@ -115,7 +115,7 @@ fun CustomSwitch(
     }
 }
 
-@Preview (showBackground = true)
+@Preview (showBackground = false)
 @Composable
 fun CustomSwitchWithState() {
     val (checked, setChecked) = remember { mutableStateOf(false) }
