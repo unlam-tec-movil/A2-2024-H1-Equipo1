@@ -32,10 +32,12 @@ fun PetCard(
     modifier = modifier
       .padding(4.dp)
       .fillMaxWidth()
-      .height(200.dp)
+      .height(120.dp)
   ) {
     Row(
-      modifier = Modifier.fillMaxSize(),
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(4.dp),
       horizontalArrangement = Arrangement.SpaceEvenly,
       verticalAlignment = Alignment.CenterVertically
     ) {
@@ -44,24 +46,30 @@ fun PetCard(
         contentDescription = null
       )
       Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(8.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceEvenly
       ) {
         CustomText(
           text = petName,
-          fontSize = 32.sp
+          fontSize = 32.sp,
+          maxLines = 1
         )
         CustomText(
           text = stringResource(R.string.pet_age, petAge),
-          fontSize = 24.sp
+          fontSize = 24.sp,
+          maxLines = 1
         )
       }
     }
   }
 }
 
-@Preview
+@Preview(
+  showSystemUi = true
+)
 @Composable
 private fun PetCardPreview() {
   PetCard(
