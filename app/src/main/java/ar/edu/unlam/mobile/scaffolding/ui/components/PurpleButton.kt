@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:import-ordering")
+
 package ar.edu.unlam.mobile.scaffolding.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,31 +16,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple2
 
-
 @Composable
-fun PurpleButton(title: String, action: () -> Unit) {
+fun PurpleButton(
+    title: String,
+    action: () -> Unit,
+) {
     Button(
         onClick = action,
-        modifier = Modifier
-            .height(53.dp)
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .height(53.dp)
+                .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Purple2)
-
+        colors = ButtonDefaults.buttonColors(containerColor = Purple2),
     ) {
         Text(
             text = title,
             fontSize = 24.sp,
-            color = Color.Black
+            color = Color.Black,
         )
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun PreviewPurpleButton(){
-    PurpleButton (title = "Guardar"){
-        
+fun PreviewPurpleButton() {
+    PurpleButton(title = "Guardar") {
     }
-    
 }
