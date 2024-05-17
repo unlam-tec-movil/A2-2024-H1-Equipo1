@@ -6,4 +6,3 @@ data class Pet(
     val age: Int,
     val type: PetType,
 )
-
