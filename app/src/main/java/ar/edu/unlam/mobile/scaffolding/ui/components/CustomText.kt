@@ -13,20 +13,20 @@ import ar.edu.unlam.mobile.scaffolding.R
 
 @Composable
 fun CustomText(
-  text: String,
-  modifier: Modifier = Modifier,
-  fontSize: TextUnit = 12.sp,
-  textAlign: TextAlign? = null,
-  color: Color = Color.Black,
-  maxLines: Int = Int.MAX_VALUE
+    text: String,
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = 12.sp,
+    textAlign: TextAlign? = null,
+    color: Color = Color.Black,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
-  Text(
-    text = text,
-    modifier = modifier,
-    fontSize = fontSize,
-    fontFamily = FontFamily(Font(R.font.anni_use_your_telescope)),
-    textAlign = textAlign,
-    color = color,
-    maxLines = maxLines
-  )
+    Text(
+        text = text,
+        modifier = modifier,
+        fontSize = fontSize,
+        fontFamily = FontFamily(Font(R.font.anni_use_your_telescope)),
+        textAlign = textAlign,
+        color = color,
+        maxLines = maxLines,
+    )
 }

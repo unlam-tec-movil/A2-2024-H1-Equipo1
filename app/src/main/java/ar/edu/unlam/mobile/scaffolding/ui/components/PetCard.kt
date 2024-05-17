@@ -32,82 +32,88 @@ import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple6
 
 @Composable
 fun PetCard(
-  petName: String,
-  petAge: Int,
-  onClick: () -> Unit,
-  modifier: Modifier = Modifier,
-  painter: Painter = painterResource(id = R.drawable.paw_round),
-  textColor: Color = Color.White,
-  cardColor: Color = Purple6,
-  titleTextSize: TextUnit = 36.sp,
-  subtitleTextSize: TextUnit = 24.sp
+    petName: String,
+    petAge: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    painter: Painter = painterResource(id = R.drawable.paw_round),
+    textColor: Color = Color.White,
+    cardColor: Color = Purple6,
+    titleTextSize: TextUnit = 36.sp,
+    subtitleTextSize: TextUnit = 24.sp,
 ) {
-  Card(
-    modifier = modifier
-      .padding(4.dp)
-      .fillMaxWidth()
-      .height(120.dp)
-      .clickable{ onClick() },
-    colors = CardDefaults.cardColors(
-      containerColor = cardColor
-    )
-  ) {
-    Row(
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 8.dp, 4.dp)
-        .background(Color.Transparent),
-      horizontalArrangement = Arrangement.SpaceEvenly,
-      verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier =
+            modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+                .height(120.dp)
+                .clickable { onClick() },
+        colors =
+            CardDefaults.cardColors(
+                containerColor = cardColor,
+            ),
     ) {
-      Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-          .size(100.dp)
-      ) {
-        Image(
-          painter = painter,
-          contentDescription = null,
-          modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .fillMaxSize()
-            .background(Color.White)
-        )
-      }
-      Column(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(8.dp)
-          .background(Color.Transparent),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.SpaceEvenly
-      ) {
-        CustomText(
-          text = petName,
-          fontSize = titleTextSize,
-          maxLines = 1,
-          color = textColor
-        )
-        CustomText(
-          text = stringResource(R.string.pet_age, petAge),
-          fontSize = subtitleTextSize,
-          maxLines = 1,
-          color = textColor
-        )
-      }
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 8.dp, 4.dp)
+                    .background(Color.Transparent),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier =
+                    Modifier
+                        .size(100.dp),
+            ) {
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .fillMaxSize()
+                            .background(Color.White),
+                )
+            }
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(Color.Transparent),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                CustomText(
+                    text = petName,
+                    fontSize = titleTextSize,
+                    maxLines = 1,
+                    color = textColor,
+                )
+                CustomText(
+                    text = stringResource(R.string.pet_age, petAge),
+                    fontSize = subtitleTextSize,
+                    maxLines = 1,
+                    color = textColor,
+                )
+            }
+        }
     }
-  }
 }
 
 @Preview(
-  showSystemUi = true
+    showSystemUi = true,
 )
 @Composable
 private fun PetCardPreview() {
-  PetCard(
-    petName = "Mauri",
-    petAge = 3,
-    painter = painterResource(R.drawable.dog_silhouette_01),
-    onClick = {}
-  )
+    PetCard(
+        petName = "Mauri",
+        petAge = 3,
+        painter = painterResource(R.drawable.dog_silhouette_01),
+        onClick = {},
+    )
 }
