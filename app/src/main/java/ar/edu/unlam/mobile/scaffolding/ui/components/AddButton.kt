@@ -10,7 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple1
@@ -28,15 +28,15 @@ fun AddButton(action: () -> Unit) {
                 contentDescription = null,
                 tint = Purple1,
                 modifier =
-                    Modifier.fillMaxSize()
+                    Modifier.fillMaxSize(),
             )
 
             Icon(
                 Icons.Rounded.AddCircle,
                 contentDescription = null,
-                tint = Color(0xFFD9D9D9),
+                tint = LightGray,
                 modifier =
-                    Modifier.fillMaxSize()
+                    Modifier.fillMaxSize(),
             )
         }
     }
