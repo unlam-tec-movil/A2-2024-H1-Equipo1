@@ -1,13 +1,9 @@
 package ar.edu.unlam.mobile.scaffolding.ui.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,9 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -33,30 +27,27 @@ import androidx.compose.ui.unit.sp
 import ar.edu.unlam.mobile.scaffolding.R
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarView() {
     val currentDate = LocalDate.now()
     val year = currentDate.year
     val month = currentDate.monthValue
-
     val daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth()
     val firstDayOfMonth = LocalDate.of(year, month, 1)
     val firstDayOfWeek = firstDayOfMonth.dayOfWeek
-
     val nameDaysOfWeek = listOf("Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do")
 
     Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+    ) {
         Text(
             text = currentDate.month.name,
             fontSize = 32.sp,
             fontFamily = FontFamily(Font(R.font.anni_use_your_telescope)),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Card {
@@ -68,14 +59,14 @@ fun CalendarView() {
                         textAlign = TextAlign.Center,
                         fontFamily = FontFamily(Font(R.font.anni_use_your_telescope)),
                         fontSize = 24.sp,
-                        modifier = Modifier
-                            .weight(1f)
+                        modifier =
+                            Modifier
+                                .weight(1f),
                     )
                 }
             }
 
             LazyVerticalGrid(GridCells.Fixed(7)) {
-
                 // Agregar días al mes
                 val firstDayOfWeekValue = firstDayOfWeek.value
                 val lastDayOfMonth = firstDayOfMonth.plusDays(daysInMonth.toLong() - 1)
@@ -87,15 +78,16 @@ fun CalendarView() {
 
                     VerticalDivider(
                         modifier = Modifier.fillMaxHeight(), // Ancho máximo de la línea
-                        thickness = 1.dp,   // Grosor de la línea
-                        color = Color.Gray // Color de la línea
-                    )//No se porque se pintan las lineas horizontales y no las verticales
+                        thickness = 1.dp, // Grosor de la línea
+                        color = Color.Gray, // Color de la línea
+                    ) // No se porque se pintan las lineas horizontales y no las verticales
 
-                    val currentDay: Int? = when {
-                        index < firstDayOfWeekValue - 1 -> null // Antes del primer día del mes
-                        index >= firstDayOfWeekValue - 1 + daysInMonth -> null // Después del último día del mes
-                        else -> index - firstDayOfWeekValue + 2 // Día válido del mes
-                    }
+                    val currentDay: Int? =
+                        when {
+                            index < firstDayOfWeekValue - 1 -> null // Antes del primer día del mes
+                            index >= firstDayOfWeekValue - 1 + daysInMonth -> null // Después del último día del mes
+                            else -> index - firstDayOfWeekValue + 2 // Día válido del mes
+                        }
                     if (currentDay != null) {
                         DayCell(currentDay.toString())
                     } else {
@@ -110,46 +102,52 @@ fun CalendarView() {
 @Composable
 fun EmptyDayCell() {
     Box(
-        modifier = Modifier
-            .size(50.dp)
-            .background(color = Color.White)
+        modifier =
+            Modifier
+                .size(50.dp)
+                .background(color = Color.White),
     ) // Espacio en blanco para representar un día vacío
     HorizontalDivider(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp), // Ancho máximo de la línea
-        thickness = 1.dp,   // Grosor de la línea
-        color = Color.Gray // Color de la línea
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(3.dp),
+        // Ancho máximo de la línea
+        thickness = 1.dp, // Grosor de la línea
+        color = Color.Gray, // Color de la línea
     )
 }
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun DayCell(day: String) {
     Box(
-        modifier = Modifier
-            .size(50.dp)
-            .background(color = Color.White)
+        modifier =
+            Modifier
+                .size(50.dp)
+                .background(color = Color.White),
     ) {
         Text(
             text = day,
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.anni_use_your_telescope)),
             textAlign = TextAlign.Start,
-            modifier = Modifier
-                .padding(start = 2.dp)
-                .align(Alignment.BottomStart)
+            modifier =
+                Modifier
+                    .padding(start = 2.dp)
+                    .align(Alignment.BottomStart),
         )
     }
     HorizontalDivider(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp), // Ancho máximo de la línea
-        thickness = 1.dp,   // Grosor de la línea
-        color = Color.Gray // Color de la línea
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(3.dp),
+        // Ancho máximo de la línea
+        thickness = 1.dp, // Grosor de la línea
+        color = Color.Gray, // Color de la línea
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun CalendarPreview() {
