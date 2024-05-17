@@ -17,24 +17,26 @@ import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple1
 
 @Composable
 fun AddButton(action: () -> Unit) {
-    IconButton(onClick = action,
-        modifier = Modifier
-            .size(width = 60.dp, height = 60.dp)) {
+    IconButton(
+        onClick = action,
+        modifier =
+            Modifier.size(width = 60.dp, height = 60.dp),
+    ) {
         Box {
             Icon(
                 Icons.Default.Add,
                 contentDescription = null,
                 tint = Purple1,
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier =
+                    Modifier.fillMaxSize()
             )
 
             Icon(
                 Icons.Rounded.AddCircle,
                 contentDescription = null,
                 tint = Color(0xFFD9D9D9),
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier =
+                    Modifier.fillMaxSize()
             )
         }
     }
@@ -42,6 +44,6 @@ fun AddButton(action: () -> Unit) {
 
 @Preview(showBackground = false)
 @Composable
-fun PreviewMas(){
+fun PreviewMas() {
     AddButton(action = { })
 }
