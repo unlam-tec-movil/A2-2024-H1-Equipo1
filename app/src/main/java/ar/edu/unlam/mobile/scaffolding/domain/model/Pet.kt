@@ -5,4 +5,5 @@ data class Pet(
     val bio: String,
     val age: Int,
     val type: PetType,
+    val weight: Float,
 )

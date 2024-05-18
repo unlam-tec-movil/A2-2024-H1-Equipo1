@@ -24,8 +24,7 @@ fun HomeScreen(
         }
 
         is HelloMessageUIState.Success -> {
-            Greeting(helloState.message, modifier)
-            CalendarView()
+            //Greeting(helloState.message, modifier)
         }
 
         is HelloMessageUIState.Error -> {
