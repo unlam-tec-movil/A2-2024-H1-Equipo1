@@ -20,11 +20,12 @@ import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple2
 fun PurpleButton(
     title: String,
     action: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = action,
         modifier =
-            Modifier
+            modifier
                 .height(53.dp)
                 .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
@@ -41,6 +42,5 @@ fun PurpleButton(
 @Preview(showBackground = false)
 @Composable
 fun PreviewPurpleButton() {
-    PurpleButton(title = "Guardar") {
-    }
+    PurpleButton(title = "Guardar", action = {})
 }
