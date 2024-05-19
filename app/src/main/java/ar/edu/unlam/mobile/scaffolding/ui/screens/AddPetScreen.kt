@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ fun AddPetScreen(
     viewModel: AddPetViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
     Column(
         modifier
             .fillMaxSize()
@@ -68,8 +70,9 @@ fun AddPetScreen(
         PurpleButton(
             title = "Guardar",
             action = {
-                viewModel.savePet()
-                onSaveButtonClick()
+                if (viewModel.savePet(context)) {
+                    onSaveButtonClick()
+                }
             },
         )
     }
