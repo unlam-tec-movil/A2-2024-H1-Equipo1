@@ -38,7 +38,7 @@ class HomeViewModel
             MutableStateFlow(
                 HomeUIState(
                     helloMessage.value,
-                    pets
+                    pets,
                 ),
             )
 
@@ -47,9 +47,10 @@ class HomeViewModel
         val uiState = _uiState.asStateFlow()
 
         init {
-            _uiState.value = HomeUIState(
-                HelloMessageUIState.Success("2b"),
-                pets
-            )
+            _uiState.value =
+                HomeUIState(
+                    HelloMessageUIState.Success("2b"),
+                    pets,
+                )
         }
     }
