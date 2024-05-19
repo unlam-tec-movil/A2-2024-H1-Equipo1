@@ -2,6 +2,8 @@ package ar.edu.unlam.mobile.scaffolding.ui.screens
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
+import ar.edu.unlam.mobile.scaffolding.data.local.pets
+import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +20,7 @@ sealed interface HelloMessageUIState {
 
 data class HomeUIState(
     val helloMessageState: HelloMessageUIState,
+    val currentPets: List<Pet>,
 )
 
 @HiltViewModel
@@ -33,7 +36,10 @@ class HomeViewModel
         // _Ui State es el estado general del view model.
         private val _uiState =
             MutableStateFlow(
-                HomeUIState(helloMessage.value),
+                HomeUIState(
+                    helloMessage.value,
+                    pets,
+                ),
             )
 
         // UIState expone el estado anterior como un Flujo de Estado de solo lectura.
@@ -41,6 +47,10 @@ class HomeViewModel
         val uiState = _uiState.asStateFlow()
 
         init {
-            _uiState.value = HomeUIState(HelloMessageUIState.Success("2b"))
+            _uiState.value =
+                HomeUIState(
+                    HelloMessageUIState.Success("2b"),
+                    pets,
+                )
         }
     }
