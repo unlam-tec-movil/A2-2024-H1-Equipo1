@@ -5,19 +5,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ar.edu.unlam.mobile.scaffolding.ui.components.BiographyTextBox
 import ar.edu.unlam.mobile.scaffolding.ui.components.PetInfoField
 import ar.edu.unlam.mobile.scaffolding.ui.components.PurpleButton
 
 @Composable
 fun AddPetScreen(
-    onButtonClick: () -> Unit,
+    onSaveButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: AddPetViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.state.collectAsState()
     Column(
         modifier
             .fillMaxSize()
@@ -34,32 +40,37 @@ fun AddPetScreen(
         ) {
             PetInfoField(
                 title = "Nombre: ",
-                value = "Pepe",
-                onValueChange = {},
+                value = state.name,
+                onValueChange = { viewModel.updateName(it) },
             )
             PetInfoField(
                 title = "Edad: ",
-                value = "30",
-                onValueChange = {},
+                value = state.age,
+                onValueChange = { viewModel.updateAge(it) },
+                keyboardType = KeyboardType.Number,
             )
             PetInfoField(
                 title = "Peso: ",
-                value = "30",
-                onValueChange = {},
+                value = state.weight,
+                onValueChange = { viewModel.updateWeight(it) },
+                keyboardType = KeyboardType.Decimal,
             )
             PetInfoField(
                 title = "Tipo: ",
-                value = "perro",
-                onValueChange = {},
+                value = state.type,
+                onValueChange = { viewModel.updateType(it) },
             )
             BiographyTextBox(
-                value = "Biografiaaaa",
-                onValueChange = {},
+                value = state.bio,
+                onValueChange = { viewModel.updateBio(it) },
             )
         }
         PurpleButton(
             title = "Guardar",
-            action = {},
+            action = {
+                viewModel.savePet()
+                onSaveButtonClick()
+            },
         )
     }
 }

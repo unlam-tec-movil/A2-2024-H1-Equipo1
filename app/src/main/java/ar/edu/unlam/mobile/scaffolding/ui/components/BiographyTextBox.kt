@@ -33,7 +33,7 @@ fun BiographyTextBox(
     Column(
         modifier =
             modifier
-                .height(300.dp)
+                .height(200.dp)
                 .background(
                     color = backGroundColor,
                     shape = RoundedCornerShape(8.dp),

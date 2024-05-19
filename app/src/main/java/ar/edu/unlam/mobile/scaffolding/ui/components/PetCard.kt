@@ -28,12 +28,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ar.edu.unlam.mobile.scaffolding.R
+import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
+import ar.edu.unlam.mobile.scaffolding.domain.model.PetType
 import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple6
 
 @Composable
 fun PetCard(
-    petName: String,
-    petAge: Int,
+    pet: Pet,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     painter: Painter = painterResource(id = R.drawable.paw_round),
@@ -89,13 +90,13 @@ fun PetCard(
                 verticalArrangement = Arrangement.SpaceEvenly,
             ) {
                 CustomText(
-                    text = petName,
+                    text = pet.name,
                     fontSize = titleTextSize,
                     maxLines = 1,
                     color = textColor,
                 )
                 CustomText(
-                    text = stringResource(R.string.pet_age, petAge),
+                    text = stringResource(R.string.pet_age, pet.age),
                     fontSize = subtitleTextSize,
                     maxLines = 1,
                     color = textColor,
@@ -110,9 +111,16 @@ fun PetCard(
 )
 @Composable
 private fun PetCardPreview() {
+    val pet =
+        Pet(
+            name = "Mauri",
+            age = 3,
+            bio = "",
+            type = PetType.DOG,
+            weight = 30f,
+        )
     PetCard(
-        petName = "Mauri",
-        petAge = 3,
+        pet = pet,
         painter = painterResource(R.drawable.dog_silhouette_01),
         onClick = {},
     )
