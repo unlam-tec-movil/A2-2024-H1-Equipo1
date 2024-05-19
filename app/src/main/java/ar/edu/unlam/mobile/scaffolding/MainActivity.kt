@@ -61,6 +61,8 @@ fun MainScreen() {
                 AddPetScreen(
                     onSaveButtonClick = {
                         controller.navigate("home")
+                        controller.navigateUp()
+                        controller.popBackStack()
                     },
                 )
             }
