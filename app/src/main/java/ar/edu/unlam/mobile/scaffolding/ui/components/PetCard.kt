@@ -2,7 +2,6 @@ package ar.edu.unlam.mobile.scaffolding.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,6 @@ import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple6
 @Composable
 fun PetCard(
     pet: Pet,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     painter: Painter = painterResource(id = R.drawable.paw_round),
     textColor: Color = Color.White,
@@ -48,8 +46,7 @@ fun PetCard(
             modifier
                 .padding(4.dp)
                 .fillMaxWidth()
-                .height(120.dp)
-                .clickable { onClick() },
+                .height(120.dp),
         colors =
             CardDefaults.cardColors(
                 containerColor = cardColor,
@@ -122,6 +119,5 @@ private fun PetCardPreview() {
     PetCard(
         pet = pet,
         painter = painterResource(R.drawable.dog_silhouette_01),
-        onClick = {},
     )
 }

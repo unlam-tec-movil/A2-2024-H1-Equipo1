@@ -21,6 +21,8 @@ sealed interface HelloMessageUIState {
 data class HomeUIState(
     val helloMessageState: HelloMessageUIState,
     val currentPets: List<Pet>,
+    val petsToDelete: MutableList<Pet>,
+    val isPetSelectionActivated: Boolean,
 )
 
 @HiltViewModel
@@ -39,6 +41,8 @@ class HomeViewModel
                 HomeUIState(
                     helloMessage.value,
                     pets,
+                    mutableListOf(),
+                    false,
                 ),
             )
 
@@ -51,6 +55,55 @@ class HomeViewModel
                 HomeUIState(
                     HelloMessageUIState.Success("2b"),
                     pets,
+                    mutableListOf(),
+                    false,
+                )
+        }
+
+        fun togglePetSelection() {
+            _uiState.value =
+                _uiState.value.copy(
+                    isPetSelectionActivated = !_uiState.value.isPetSelectionActivated,
+                )
+            clearDeletedPetList()
+        }
+
+        fun addPetToBeDeleted(pet: Pet) {
+            val updatedList = _uiState.value.petsToDelete
+            updatedList.add(pet)
+            _uiState.value =
+                _uiState.value.copy(
+                    petsToDelete = updatedList,
+                )
+        }
+
+        fun deletePetFromToBeDeletedList(pet: Pet) {
+            val updatedList = _uiState.value.petsToDelete
+            updatedList.remove(pet)
+            _uiState.value =
+                _uiState.value.copy(
+                    petsToDelete = updatedList,
+                )
+        }
+
+        fun deletePets() {
+            pets.removeAll(_uiState.value.petsToDelete)
+            togglePetSelection()
+            _uiState.value =
+                _uiState.value.copy(
+                    currentPets = pets,
+                )
+            clearDeletedPetList()
+        }
+
+        fun checkIfDeletedListContainPet(pet: Pet): Boolean {
+            return _uiState.value.petsToDelete.contains(pet)
+        }
+
+        private fun clearDeletedPetList() {
+            _uiState.value =
+                _uiState.value.copy(
+                    petsToDelete = mutableListOf(),
                 )
         }
     }
