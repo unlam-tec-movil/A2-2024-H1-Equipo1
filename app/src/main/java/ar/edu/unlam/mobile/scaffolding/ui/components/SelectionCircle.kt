@@ -15,7 +15,7 @@ import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple1
 
 @Composable
 fun SelectCircle(
-    isPetSelected: Boolean,
+    isSelected: Boolean,
     onClick: () -> Unit,
 ) {
     Box(
@@ -24,7 +24,7 @@ fun SelectCircle(
                 .height(24.dp)
                 .width(24.dp),
     ) {
-        if (isPetSelected) {
+        if (isSelected) {
             IconButton(
                 onClick = onClick,
             ) {
