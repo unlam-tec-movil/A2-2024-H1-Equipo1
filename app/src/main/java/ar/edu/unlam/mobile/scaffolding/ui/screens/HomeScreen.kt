@@ -48,11 +48,11 @@ fun HomeScreen(
         // un estado de éxito y un mensaje de error.
 
         when (val helloState = uiState.helloMessageState) {
-            is HelloMessageUIState.Loading -> {
+            is PetListUIState.Loading -> {
                 // Loading
             }
 
-            is HelloMessageUIState.Success -> {
+            is PetListUIState.Success -> {
                 Column(
                     modifier =
                         Modifier
@@ -118,7 +118,7 @@ fun HomeScreen(
                 }
             }
 
-            is HelloMessageUIState.Error -> {
+            is PetListUIState.Error -> {
                 // Error
             }
         }

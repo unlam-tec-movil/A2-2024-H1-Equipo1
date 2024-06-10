@@ -1,25 +1,47 @@
 package ar.edu.unlam.mobile.scaffolding.ui.screens
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
+import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Immutable
-sealed interface HelloMessageUIState {
-    data class Success(val message: String) : HelloMessageUIState
+sealed interface PetListUIState {
+    data class Success(val message: String) : PetListUIState
 
-    data object Loading : HelloMessageUIState
+    data object Loading : PetListUIState
 
-    data class Error(val message: String) : HelloMessageUIState
+    data class Error(val message: String) : PetListUIState
+}
+
+data class PetViewData(
+    val pet: Pet,
+    var selected: MutableState<Boolean> = mutableStateOf(false),
+)
+
+fun PetViewData.isSelected(): Boolean {
+    return this.selected.value
+}
+
+fun PetViewData.toggleSelection() {
+    this.selected.value = !this.selected.value
+}
+
+fun Pet.toPetViewData(isSelected: Boolean = false): PetViewData {
+    return PetViewData(this, mutableStateOf(isSelected))
 }
 
 data class HomeUIState(
-    val helloMessageState: HelloMessageUIState,
+    val helloMessageState: PetListUIState,
     val currentPets: List<Pet>,
     val petsToDelete: MutableList<Pet>,
     val isPetSelectionActivated: Boolean,
@@ -28,12 +50,12 @@ data class HomeUIState(
 @HiltViewModel
 class HomeViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(private val petService: PetService) : ViewModel() {
         // Mutable State Flow contiene un objeto de estado mutable. Simplifica la operación de
         // actualización de información y de manejo de estados de una aplicación: Cargando, Error, Éxito
         // (https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
         // _helloMessage State es el estado del componente "HelloMessage" inicializado como "Cargando"
-        private val helloMessage = MutableStateFlow(HelloMessageUIState.Loading)
+        private val helloMessage = MutableStateFlow(PetListUIState.Loading)
 
         // _Ui State es el estado general del view model.
         private val _uiState =
@@ -53,11 +75,14 @@ class HomeViewModel
         init {
             _uiState.value =
                 HomeUIState(
-                    HelloMessageUIState.Success("2b"),
+                    PetListUIState.Success("2b"),
                     pets,
                     mutableListOf(),
                     false,
                 )
+            viewModelScope.launch {
+                fetchPets()
+            }
         }
 
         fun togglePetSelection() {
@@ -105,5 +130,15 @@ class HomeViewModel
                 _uiState.value.copy(
                     petsToDelete = mutableListOf(),
                 )
+        }
+
+        private suspend fun fetchPets() {
+            petService.getPetList()
+                .collect {
+                    _uiState.value =
+                        _uiState.value.copy(
+                            currentPets = it,
+                        )
+                }
         }
     }
