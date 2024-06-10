@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
 import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -102,6 +103,12 @@ class HomeViewModel
         }
 
         fun deletePets() {
+            pets.removeAll(_uiState.value.petsToDelete)
+            viewModelScope.launch {
+                fetchPets()
+            }
+            clearDeletedPetList()
+            togglePetSelection()
         }
 
         fun checkIfDeletedListContainPet(pet: Pet): Boolean {
