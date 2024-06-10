@@ -47,7 +47,7 @@ fun HomeScreen(
         // "tres vías": Loading, Success y Error. Esto nos permite mostrar un estado de carga,
         // un estado de éxito y un mensaje de error.
 
-        when (val helloState = uiState.helloMessageState) {
+        when (val list = uiState.petListUIState) {
             is PetListUIState.Loading -> {
                 // Loading
             }
@@ -61,7 +61,7 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    if (uiState.currentPets.isEmpty()) {
+                    if (list.pets.isEmpty()) {
                         CustomText(
                             text = "Comenzá a agregar mascotas!",
                             fontSize = 48.sp,
@@ -70,7 +70,7 @@ fun HomeScreen(
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                         ) {
-                            items(uiState.currentPets) { pet ->
+                            items(list.pets) { pet ->
                                 Row(
                                     modifier =
                                         Modifier

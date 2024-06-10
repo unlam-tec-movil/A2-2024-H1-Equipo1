@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @Immutable
 sealed interface PetListUIState {
-    data class Success(val message: String) : PetListUIState
+    data class Success(val pets: List<Pet>) : PetListUIState
 
     data object Loading : PetListUIState
 
@@ -41,7 +41,7 @@ fun Pet.toPetViewData(isSelected: Boolean = false): PetViewData {
 }
 
 data class HomeUIState(
-    val helloMessageState: PetListUIState,
+    val petListUIState: PetListUIState,
     val currentPets: List<Pet>,
     val petsToDelete: MutableList<Pet>,
     val isPetSelectionActivated: Boolean,
@@ -55,13 +55,13 @@ class HomeViewModel
         // actualización de información y de manejo de estados de una aplicación: Cargando, Error, Éxito
         // (https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
         // _helloMessage State es el estado del componente "HelloMessage" inicializado como "Cargando"
-        private val helloMessage = MutableStateFlow(PetListUIState.Loading)
+        private val petListState = MutableStateFlow(PetListUIState.Loading)
 
         // _Ui State es el estado general del view model.
         private val _uiState =
             MutableStateFlow(
                 HomeUIState(
-                    helloMessage.value,
+                    petListState.value,
                     pets,
                     mutableListOf(),
                     false,
@@ -73,13 +73,6 @@ class HomeViewModel
         val uiState = _uiState.asStateFlow()
 
         init {
-            _uiState.value =
-                HomeUIState(
-                    PetListUIState.Success("2b"),
-                    pets,
-                    mutableListOf(),
-                    false,
-                )
             viewModelScope.launch {
                 fetchPets()
             }
@@ -137,7 +130,7 @@ class HomeViewModel
                 .collect {
                     _uiState.value =
                         _uiState.value.copy(
-                            currentPets = it,
+                            petListUIState = PetListUIState.Success(it),
                         )
                 }
         }
