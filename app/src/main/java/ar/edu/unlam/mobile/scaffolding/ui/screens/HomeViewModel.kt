@@ -5,7 +5,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
 import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +41,6 @@ fun Pet.toPetViewData(isSelected: Boolean = false): PetViewData {
 
 data class HomeUIState(
     val petListUIState: PetListUIState,
-    val currentPets: List<Pet>,
     val petsToDelete: MutableList<Pet>,
     val isPetSelectionActivated: Boolean,
 )
@@ -62,7 +60,6 @@ class HomeViewModel
             MutableStateFlow(
                 HomeUIState(
                     petListState.value,
-                    pets,
                     mutableListOf(),
                     false,
                 ),
@@ -105,13 +102,6 @@ class HomeViewModel
         }
 
         fun deletePets() {
-            pets.removeAll(_uiState.value.petsToDelete)
-            togglePetSelection()
-            _uiState.value =
-                _uiState.value.copy(
-                    currentPets = pets,
-                )
-            clearDeletedPetList()
         }
 
         fun checkIfDeletedListContainPet(pet: Pet): Boolean {
