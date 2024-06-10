@@ -5,7 +5,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
 import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @Immutable
 sealed interface PetListUIState {
-    data class Success(val pets: List<Pet>) : PetListUIState
+    data class Success(val pets: List<PetViewData>) : PetListUIState
 
     data object Loading : PetListUIState
 
@@ -55,6 +54,7 @@ class HomeViewModel
         // (https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
         // _helloMessage State es el estado del componente "HelloMessage" inicializado como "Cargando"
         private val petListState = MutableStateFlow(PetListUIState.Loading)
+        private val selectedPets: MutableList<PetViewData> = mutableListOf()
 
         // _Ui State es el estado general del view model.
         private val _uiState =
@@ -81,53 +81,44 @@ class HomeViewModel
                 _uiState.value.copy(
                     isPetSelectionActivated = !_uiState.value.isPetSelectionActivated,
                 )
-            clearDeletedPetList()
+            if (selectedPets.isNotEmpty()) {
+                for (petView in selectedPets) {
+                    petView.toggleSelection()
+                }
+                selectedPets.clear()
+            }
         }
 
-        fun addPetToBeDeleted(pet: Pet) {
-            val updatedList = _uiState.value.petsToDelete
-            updatedList.add(pet)
-            _uiState.value =
-                _uiState.value.copy(
-                    petsToDelete = updatedList,
-                )
-        }
-
-        fun deletePetFromToBeDeletedList(pet: Pet) {
-            val updatedList = _uiState.value.petsToDelete
-            updatedList.remove(pet)
-            _uiState.value =
-                _uiState.value.copy(
-                    petsToDelete = updatedList,
-                )
+        fun selectPet(petViewData: PetViewData) {
+            petViewData.toggleSelection()
+            if (petViewData.isSelected()) {
+                selectedPets.add(petViewData)
+            } else {
+                selectedPets.remove(petViewData)
+            }
         }
 
         fun deletePets() {
-            pets.removeAll(_uiState.value.petsToDelete)
             viewModelScope.launch {
+                selectedPets.forEach {
+                    petService.deletePet(it.pet)
+                }
                 fetchPets()
             }
-            clearDeletedPetList()
             togglePetSelection()
         }
 
-        fun checkIfDeletedListContainPet(pet: Pet): Boolean {
-            return _uiState.value.petsToDelete.contains(pet)
-        }
-
-        private fun clearDeletedPetList() {
-            _uiState.value =
-                _uiState.value.copy(
-                    petsToDelete = mutableListOf(),
-                )
-        }
-
-        private suspend fun fetchPets() {
+        suspend fun fetchPets() {
             petService.getPetList()
                 .collect {
                     _uiState.value =
                         _uiState.value.copy(
-                            petListUIState = PetListUIState.Success(it),
+                            petListUIState =
+                                PetListUIState.Success(
+                                    it.map { pet ->
+                                        pet.toPetViewData()
+                                    },
+                                ),
                         )
                 }
         }

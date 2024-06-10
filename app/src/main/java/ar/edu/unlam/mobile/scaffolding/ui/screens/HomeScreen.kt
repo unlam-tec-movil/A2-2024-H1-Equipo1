@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -53,6 +54,9 @@ fun HomeScreen(
             }
 
             is PetListUIState.Success -> {
+                LaunchedEffect(Unit) {
+                    viewModel.fetchPets()
+                }
                 Column(
                     modifier =
                         Modifier
@@ -70,25 +74,21 @@ fun HomeScreen(
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                         ) {
-                            items(list.pets) { pet ->
+                            items(list.pets) { petViewData ->
                                 Row(
                                     modifier =
                                         Modifier
                                             .combinedClickable(
                                                 onClick = {
                                                     if (uiState.isPetSelectionActivated) {
-                                                        if (viewModel.checkIfDeletedListContainPet(pet)) {
-                                                            viewModel.deletePetFromToBeDeletedList(pet)
-                                                        } else {
-                                                            viewModel.addPetToBeDeleted(pet)
-                                                        }
+                                                        viewModel.selectPet(petViewData)
                                                     } else {
                                                         // ir a la pantalla de editar
                                                     }
                                                 },
                                                 onLongClick = {
                                                     viewModel.togglePetSelection()
-                                                    viewModel.addPetToBeDeleted(pet)
+                                                    viewModel.selectPet(petViewData)
                                                 },
                                             ),
                                 ) {
@@ -98,18 +98,14 @@ fun HomeScreen(
                                     ) {
                                         SelectCircle(
                                             isPetSelected =
-                                                viewModel.checkIfDeletedListContainPet(pet),
+                                                petViewData.isSelected(),
                                             onClick = {
-                                                if (viewModel.checkIfDeletedListContainPet(pet)) {
-                                                    viewModel.deletePetFromToBeDeletedList(pet)
-                                                } else {
-                                                    viewModel.addPetToBeDeleted(pet)
-                                                }
+                                                viewModel.selectPet(petViewData)
                                             },
                                         )
                                     }
                                     PetCard(
-                                        pet,
+                                        petViewData.pet,
                                     )
                                 }
                             }
