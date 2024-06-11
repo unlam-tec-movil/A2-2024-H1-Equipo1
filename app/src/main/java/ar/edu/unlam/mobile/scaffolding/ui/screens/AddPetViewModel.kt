@@ -3,9 +3,9 @@ package ar.edu.unlam.mobile.scaffolding.ui.screens
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
 import ar.edu.unlam.mobile.scaffolding.domain.model.PetType
+import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +22,7 @@ data class AddPetState(
 @HiltViewModel
 class AddPetViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(private val petService: PetService) : ViewModel() {
         private val _state = MutableStateFlow(AddPetState())
         val state = _state.asStateFlow()
 
@@ -34,7 +34,7 @@ class AddPetViewModel
                     } else {
                         PetType.CAT
                     }
-                pets.add(
+                petService.addPet(
                     Pet(
                         name = _state.value.name,
                         age = _state.value.age.toInt(),
