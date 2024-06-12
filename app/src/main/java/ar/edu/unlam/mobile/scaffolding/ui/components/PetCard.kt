@@ -110,6 +110,7 @@ fun PetCard(
 private fun PetCardPreview() {
     val pet =
         Pet(
+            id = 1,
             name = "Mauri",
             age = 3,
             bio = "",
