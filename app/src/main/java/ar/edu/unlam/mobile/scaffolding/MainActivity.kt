@@ -56,9 +56,9 @@ fun MainScreen() {
                     onAddButtonClick = {
                         controller.navigate("add_pet")
                     },
-                    onDetailPetButtonClick = {petId ->
+                    onDetailPetButtonClick = { petId ->
                         controller.navigate("pet_detail/$petId")
-                    }
+                    },
                 )
             }
             composable("add_pet") {
@@ -70,9 +70,9 @@ fun MainScreen() {
                     },
                 )
             }
-            composable("pet_detail/{petId}"){backStackEntry ->
+            composable("pet_detail/{petId}") { backStackEntry ->
                 val petId = backStackEntry.arguments?.getString("petId")?.toIntOrNull()
-                if(petId != null) {
+                if (petId != null) {
                     PetDetailScreen(petId)
                 }
             }

@@ -31,7 +31,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel()) {
+fun PetDetailScreen(
+    petId: Int,
+    viewModel: PetDetailViewModel = hiltViewModel(),
+) {
     // Cargar los detalles del pet cuando se inicia la pantalla
     LaunchedEffect(petId) {
         viewModel.loadPetDetails(petId)
@@ -49,17 +52,14 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
     // Estado local para el TextField de distancia
     var distanceInput by remember { mutableStateOf("") }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Detalles de mascota n°$petId") }
-            )
-        }
-    ) { innerPadding ->
+    Scaffold(topBar = {
+        TopAppBar(title = { Text("Detalles de mascota n°$petId") })
+    }) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .padding(16.dp),
         ) {
             Text(text = "Hola, $petName!", style = MaterialTheme.typography.bodyMedium)
 
@@ -74,18 +74,20 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
             Text(text = "Raciones consumidas: $foodConsumed / $recommendedRations")
             LinearProgressIndicator(
                 progress = { foodConsumed / recommendedRations },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(20.dp),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(text = "Comida consumida: $foodConsumed")
                 Button(
@@ -96,7 +98,7 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
                         }
                     },
                     enabled = foodConsumed < recommendedRations, // Deshabilitar si se alcanzó el límite
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
                 ) {
                     Text(text = "Agregar ración")
                 }
@@ -107,16 +109,18 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
             Text(text = "Raciones consumidas: $waterConsumed / $recommendedWaterRations")
             LinearProgressIndicator(
                 progress = { waterConsumed / recommendedWaterRations },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(20.dp),
             )
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(text = "Registros de agua")
                 Button(
@@ -127,7 +131,7 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
                         }
                     },
                     enabled = waterConsumed < recommendedRations,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
                 ) {
                     Text(text = "Agregar")
                 }
@@ -135,17 +139,18 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
 
             // Distancia recorrida de paseo
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 TextField(
                     value = distanceInput,
                     onValueChange = { distanceInput = it },
                     label = { Text("Distancia de paseo (metros)") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Button(
                     onClick = {
@@ -153,7 +158,7 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
                         viewModel.updateDistanceWalked(distance)
                         distanceInput = "" // Limpiar el input después de actualizar
                     },
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
                 ) {
                     Text(text = "+")
                 }
@@ -174,8 +179,7 @@ fun PetDetailScreen(petId: Int, viewModel: PetDetailViewModel = hiltViewModel())
             Text(text = "Raciones consumidas: $foodConsumed")
             Text(text = "Raciones de agua: $waterConsumed")
             Text(text = "Distancia recorrida: $distanceWalked")
-            */
-
+             */
         }
     }
 }

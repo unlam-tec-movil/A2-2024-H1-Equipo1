@@ -23,7 +23,9 @@ data class AddPetState(
 @HiltViewModel
 class AddPetViewModel
     @Inject
-    constructor(private val petService: PetService) : ViewModel() {
+    constructor(
+        private val petService: PetService,
+    ) : ViewModel() {
         private val _state = MutableStateFlow(AddPetState())
         val state = _state.asStateFlow()
 

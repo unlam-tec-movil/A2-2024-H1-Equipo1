@@ -60,9 +60,9 @@ fun HomeScreen(
                 }
                 Column(
                     modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(top = paddingValues.calculateTopPadding()),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(top = paddingValues.calculateTopPadding()),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
@@ -78,20 +78,20 @@ fun HomeScreen(
                             items(list.pets) { petViewData ->
                                 Row(
                                     modifier =
-                                    Modifier
-                                        .combinedClickable(
-                                            onClick = {
-                                                if (uiState.isPetSelectionActivated) {
+                                        Modifier
+                                            .combinedClickable(
+                                                onClick = {
+                                                    if (uiState.isPetSelectionActivated) {
+                                                        viewModel.selectPet(petViewData)
+                                                    } else {
+                                                        onDetailPetButtonClick(petViewData.pet.id)
+                                                    }
+                                                },
+                                                onLongClick = {
+                                                    viewModel.togglePetSelection()
                                                     viewModel.selectPet(petViewData)
-                                                } else {
-                                                    onDetailPetButtonClick(petViewData.pet.id)
-                                                }
-                                            },
-                                            onLongClick = {
-                                                viewModel.togglePetSelection()
-                                                viewModel.selectPet(petViewData)
-                                            },
-                                        ),
+                                                },
+                                            ),
                                 ) {
                                     AnimatedVisibility(
                                         visible = uiState.isPetSelectionActivated,
@@ -99,7 +99,7 @@ fun HomeScreen(
                                     ) {
                                         SelectCircle(
                                             isPetSelected =
-                                            petViewData.isSelected(),
+                                                petViewData.isSelected(),
                                             onClick = {
                                                 viewModel.selectPet(petViewData)
                                             },
@@ -125,4 +125,3 @@ fun HomeScreen(
         onBack = { viewModel.togglePetSelection() },
     )
 }
-
