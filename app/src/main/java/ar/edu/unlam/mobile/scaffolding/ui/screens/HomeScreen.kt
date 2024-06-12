@@ -30,6 +30,7 @@ import ar.edu.unlam.mobile.scaffolding.ui.components.SelectCircle
 @Composable
 fun HomeScreen(
     onAddButtonClick: () -> Unit,
+    onDetailPetButtonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -83,7 +84,7 @@ fun HomeScreen(
                                                     if (uiState.isPetSelectionActivated) {
                                                         viewModel.selectPet(petViewData)
                                                     } else {
-                                                        // ir a la pantalla de editar
+                                                        onDetailPetButtonClick(petViewData.pet.id)
                                                     }
                                                 },
                                                 onLongClick = {

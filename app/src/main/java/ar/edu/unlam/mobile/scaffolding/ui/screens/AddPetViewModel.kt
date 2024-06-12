@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 data class AddPetState(
+    val id: Int = 0,
     val name: String = "",
     val age: String = "",
     val weight: String = "",
@@ -22,7 +23,9 @@ data class AddPetState(
 @HiltViewModel
 class AddPetViewModel
     @Inject
-    constructor(private val petService: PetService) : ViewModel() {
+    constructor(
+        private val petService: PetService,
+    ) : ViewModel() {
         private val _state = MutableStateFlow(AddPetState())
         val state = _state.asStateFlow()
 
@@ -36,6 +39,7 @@ class AddPetViewModel
                     }
                 petService.addPet(
                     Pet(
+                        id = _state.value.id,
                         name = _state.value.name,
                         age = _state.value.age.toInt(),
                         weight = _state.value.weight.toFloat(),

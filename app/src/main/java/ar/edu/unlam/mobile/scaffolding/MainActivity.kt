@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ar.edu.unlam.mobile.scaffolding.ui.screens.AddPetScreen
 import ar.edu.unlam.mobile.scaffolding.ui.screens.HomeScreen
+import ar.edu.unlam.mobile.scaffolding.ui.screens.PetDetailScreen
 import ar.edu.unlam.mobile.scaffolding.ui.theme.ScaffoldingV2Theme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,6 +56,9 @@ fun MainScreen() {
                     onAddButtonClick = {
                         controller.navigate("add_pet")
                     },
+                    onDetailPetButtonClick = { petId ->
+                        controller.navigate("pet_detail/$petId")
+                    },
                 )
             }
             composable("add_pet") {
@@ -65,6 +69,12 @@ fun MainScreen() {
                         controller.popBackStack()
                     },
                 )
+            }
+            composable("pet_detail/{petId}") { backStackEntry ->
+                val petId = backStackEntry.arguments?.getString("petId")?.toIntOrNull()
+                if (petId != null) {
+                    PetDetailScreen(petId)
+                }
             }
         }
     }

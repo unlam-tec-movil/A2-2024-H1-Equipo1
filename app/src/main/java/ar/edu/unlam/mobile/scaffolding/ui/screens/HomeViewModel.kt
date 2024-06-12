@@ -15,11 +15,15 @@ import javax.inject.Inject
 
 @Immutable
 sealed interface PetListUIState {
-    data class Success(val pets: List<PetViewData>) : PetListUIState
+    data class Success(
+        val pets: List<PetViewData>,
+    ) : PetListUIState
 
     data object Loading : PetListUIState
 
-    data class Error(val message: String) : PetListUIState
+    data class Error(
+        val message: String,
+    ) : PetListUIState
 }
 
 data class PetViewData(
@@ -27,17 +31,13 @@ data class PetViewData(
     var selected: MutableState<Boolean> = mutableStateOf(false),
 )
 
-fun PetViewData.isSelected(): Boolean {
-    return this.selected.value
-}
+fun PetViewData.isSelected(): Boolean = this.selected.value
 
 fun PetViewData.toggleSelection() {
     this.selected.value = !this.selected.value
 }
 
-fun Pet.toPetViewData(isSelected: Boolean = false): PetViewData {
-    return PetViewData(this, mutableStateOf(isSelected))
-}
+fun Pet.toPetViewData(isSelected: Boolean = false): PetViewData = PetViewData(this, mutableStateOf(isSelected))
 
 data class HomeUIState(
     val petListUIState: PetListUIState,
@@ -48,7 +48,9 @@ data class HomeUIState(
 @HiltViewModel
 class HomeViewModel
     @Inject
-    constructor(private val petService: PetService) : ViewModel() {
+    constructor(
+        private val petService: PetService,
+    ) : ViewModel() {
         // Mutable State Flow contiene un objeto de estado mutable. Simplifica la operación de
         // actualización de información y de manejo de estados de una aplicación: Cargando, Error, Éxito
         // (https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
@@ -109,7 +111,8 @@ class HomeViewModel
         }
 
         suspend fun fetchPets() {
-            petService.getPetList()
+            petService
+                .getPetList()
                 .collect {
                     _uiState.value =
                         _uiState.value.copy(
