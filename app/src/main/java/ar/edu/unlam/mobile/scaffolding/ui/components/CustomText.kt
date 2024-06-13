@@ -19,6 +19,7 @@ fun CustomText(
     textAlign: TextAlign? = null,
     color: Color = Color.Black,
     maxLines: Int = Int.MAX_VALUE,
+    lineHeight: TextUnit = TextUnit.Unspecified,
 ) {
     Text(
         text = text,
@@ -28,5 +29,6 @@ fun CustomText(
         textAlign = textAlign,
         color = color,
         maxLines = maxLines,
+        lineHeight = lineHeight,
     )
 }
