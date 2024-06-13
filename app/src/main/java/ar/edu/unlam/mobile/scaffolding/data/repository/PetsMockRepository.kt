@@ -19,7 +19,11 @@ class PetsMockRepository
             return petList
         }
 
-        override fun deletePet(pet: Pet) {
+        override suspend fun getPetById(id: Int): Pet? {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun deletePet(pet: Pet) {
             pets.forEach {
                 if (it.name == pet.name) {
                     pets.remove(it)
@@ -27,7 +31,7 @@ class PetsMockRepository
             }
         }
 
-        override fun addPet(pet: Pet) {
+        override suspend fun addPet(pet: Pet) {
             pets.add(pet)
         }
     }

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
-import ar.edu.unlam.mobile.scaffolding.domain.model.PetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,7 +59,6 @@ class PetDetailViewModel
                 "Desconocido",
                 "",
                 3,
-                PetType.DOG,
                 2F,
             )
         }
