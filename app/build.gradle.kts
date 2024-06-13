@@ -80,6 +80,7 @@ dependencies {
 
     // Room
     implementation(libs.androidx.room)
+    implementation(libs.androidx.room.artifact)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 

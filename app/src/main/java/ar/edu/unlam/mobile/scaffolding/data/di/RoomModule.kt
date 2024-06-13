@@ -21,11 +21,11 @@ object RoomModule {
     @Singleton
     fun provideRoom(
         @ApplicationContext context: Context,
-    ) = Room.databaseBuilder(context, PetDatabase::class.java, PET_DATABASE_NAME)
+    ) = Room.databaseBuilder(context, PetDatabase::class.java, PET_DATABASE_NAME).build()
 
     @Provides
     @Singleton
-    fun provideNoteRepository(db: PetDatabase): PetsRepository {
+    fun providePetRepository(db: PetDatabase): PetsRepository {
         return PetsRepositoryImpl(db.getPetDao())
     }
 }
