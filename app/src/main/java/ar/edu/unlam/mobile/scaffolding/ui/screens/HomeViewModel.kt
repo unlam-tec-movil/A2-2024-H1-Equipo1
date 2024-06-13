@@ -102,7 +102,9 @@ class HomeViewModel
 
         fun deletePets() {
             viewModelScope.launch {
-                selectedPets.forEach {
+                // Crea una copia de la lista para evitar ConcurrentModificationException
+                val petsToDelete = selectedPets.toList()
+                petsToDelete.forEach {
                     petService.deletePet(it.pet)
                 }
                 fetchPets()

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -25,15 +26,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ar.edu.unlam.mobile.scaffolding.ui.components.CustomText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PetDetailScreen(
     petId: Int,
     viewModel: PetDetailViewModel = hiltViewModel(),
+    onSaveButtonClick: () -> Unit,
 ) {
     // Cargar los detalles del pet cuando se inicia la pantalla
     LaunchedEffect(petId) {
@@ -180,6 +185,19 @@ fun PetDetailScreen(
             Text(text = "Raciones de agua: $waterConsumed")
             Text(text = "Distancia recorrida: $distanceWalked")
              */
+            Button(
+                onClick = {
+                    viewModel.saveData(petId)
+                    onSaveButtonClick()
+                },
+                modifier = Modifier.width(300.dp),
+            ) {
+                CustomText(
+                    text = "Guardar Datos",
+                    fontSize = 24.sp,
+                    color = Color.White,
+                )
+            }
         }
     }
 }

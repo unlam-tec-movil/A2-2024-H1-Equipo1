@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface PetUseCases {
     fun getPetList(): Flow<List<Pet>>
 
-    fun deletePet(pet: Pet)
+    suspend fun getPetById(id: Int): Pet?
 
-    fun addPet(pet: Pet)
+    suspend fun deletePet(pet: Pet)
+
+    suspend fun addPet(pet: Pet)
 }

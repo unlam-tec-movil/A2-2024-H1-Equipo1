@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ar.edu.unlam.mobile.scaffolding.R
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
-import ar.edu.unlam.mobile.scaffolding.domain.model.PetType
 import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple6
 
 @Composable
@@ -114,7 +113,6 @@ private fun PetCardPreview() {
             name = "Mauri",
             age = 3,
             bio = "",
-            type = PetType.DOG,
             weight = 30f,
         )
     PetCard(

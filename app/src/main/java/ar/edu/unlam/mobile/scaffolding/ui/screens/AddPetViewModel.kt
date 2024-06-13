@@ -3,12 +3,13 @@ package ar.edu.unlam.mobile.scaffolding.ui.screens
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
-import ar.edu.unlam.mobile.scaffolding.domain.model.PetType
 import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class AddPetState(
@@ -31,22 +32,17 @@ class AddPetViewModel
 
         fun savePet(context: Context): Boolean {
             if (checkPetData(context)) {
-                val type =
-                    if (state.value.type == "perro") {
-                        PetType.DOG
-                    } else {
-                        PetType.CAT
-                    }
-                petService.addPet(
-                    Pet(
-                        id = _state.value.id,
-                        name = _state.value.name,
-                        age = _state.value.age.toInt(),
-                        weight = _state.value.weight.toFloat(),
-                        bio = _state.value.bio,
-                        type = type,
-                    ),
-                )
+                viewModelScope.launch {
+                    petService.addPet(
+                        Pet(
+                            id = _state.value.id,
+                            name = _state.value.name,
+                            age = _state.value.age.toInt(),
+                            weight = _state.value.weight.toFloat(),
+                            bio = _state.value.bio,
+                        ),
+                    )
+                }
                 return true
             }
             return false

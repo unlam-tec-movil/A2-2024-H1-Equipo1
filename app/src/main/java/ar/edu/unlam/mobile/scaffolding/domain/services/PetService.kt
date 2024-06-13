@@ -13,11 +13,15 @@ class PetService
             return petsRepository.getPetList()
         }
 
-        override fun deletePet(pet: Pet) {
+        override suspend fun getPetById(id: Int): Pet? {
+            return petsRepository.getPetById(id)
+        }
+
+        override suspend fun deletePet(pet: Pet) {
             petsRepository.deletePet(pet)
         }
 
-        override fun addPet(pet: Pet) {
+        override suspend fun addPet(pet: Pet) {
             petsRepository.addPet(pet)
         }
     }
