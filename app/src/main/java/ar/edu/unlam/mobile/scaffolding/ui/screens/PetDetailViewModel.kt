@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.data.local.pets
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
+import ar.edu.unlam.mobile.scaffolding.domain.usecases.PetUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,13 +15,16 @@ import javax.inject.Inject
 @HiltViewModel
 class PetDetailViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(private val petUseCases: PetUseCases) : ViewModel() {
         private val _petName = MutableStateFlow("")
         private val _foodConsumed = MutableStateFlow(0f)
         private val _waterConsumed = MutableStateFlow(0f)
         private val _distanceWalked = MutableStateFlow(0f)
         private val _recommendedRations = MutableStateFlow(0)
         private val _recommendedWaterRations = MutableStateFlow(0)
+        private var petWeight = 0f
+        private var petBio = ""
+        private var petAge = 0
 
         val petName: StateFlow<String> get() = _petName
         val foodConsumed: StateFlow<Float> get() = _foodConsumed
@@ -44,11 +48,19 @@ class PetDetailViewModel
         fun loadPetDetails(petId: Int) {
             viewModelScope.launch {
                 // Simular la carga de datos para la mascota
-                val pet = getPetById(petId)
-                _petName.value = pet.name
-                _recommendedRations.value = calculateRecommendedRations(pet.weight)
-                _recommendedWaterRations.value = calculateRecommendedRations(pet.weight)
-                resetDailyValuesAtMidnight()
+                val pet = petUseCases.getPetById(petId)
+                if (pet != null) {
+                    _petName.value = pet.name
+                    petAge = pet.age
+                    petBio = pet.bio
+                    petWeight = pet.weight
+                    _foodConsumed.value = pet.foodConsumed
+                    _waterConsumed.value = pet.waterConsumer
+                    _distanceWalked.value = pet.distanceWalked
+                    _recommendedRations.value = calculateRecommendedRations(pet.weight)
+                    _recommendedWaterRations.value = calculateRecommendedRations(pet.weight)
+                    resetDailyValuesAtMidnight()
+                }
             }
         }
 
@@ -98,6 +110,23 @@ class PetDetailViewModel
                 _waterConsumed.value = 0f
                 _distanceWalked.value = 0f
                 resetDailyValuesAtMidnight()
+            }
+        }
+
+        fun saveData(petId: Int) {
+            viewModelScope.launch {
+                petUseCases.addPet(
+                    Pet(
+                        id = petId,
+                        name = _petName.value,
+                        bio = petBio,
+                        age = petAge,
+                        weight = petWeight,
+                        foodConsumed = _foodConsumed.value,
+                        waterConsumer = _waterConsumed.value,
+                        distanceWalked = _distanceWalked.value,
+                    ),
+                )
             }
         }
     }

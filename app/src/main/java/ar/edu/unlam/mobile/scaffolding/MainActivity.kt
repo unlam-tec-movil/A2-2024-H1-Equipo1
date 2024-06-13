@@ -73,7 +73,14 @@ fun MainScreen() {
             composable("pet_detail/{petId}") { backStackEntry ->
                 val petId = backStackEntry.arguments?.getString("petId")?.toIntOrNull()
                 if (petId != null) {
-                    PetDetailScreen(petId)
+                    PetDetailScreen(
+                        petId = petId,
+                        onSaveButtonClick = {
+                            controller.navigate("home")
+                            controller.navigateUp()
+                            controller.popBackStack()
+                        },
+                    )
                 }
             }
         }
