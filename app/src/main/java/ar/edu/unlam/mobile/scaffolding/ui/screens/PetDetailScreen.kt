@@ -8,15 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,13 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ar.edu.unlam.mobile.scaffolding.ui.components.CustomText
+import ar.edu.unlam.mobile.scaffolding.ui.components.PetInfoField
+import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple1
+import ar.edu.unlam.mobile.scaffolding.ui.theme.Purple8
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PetDetailScreen(
+    onSaveButtonClick: () -> Unit,
     petId: Int,
     viewModel: PetDetailViewModel = hiltViewModel(),
-    onSaveButtonClick: () -> Unit,
 ) {
     // Cargar los detalles del pet cuando se inicia la pantalla
     LaunchedEffect(petId) {
@@ -54,11 +55,15 @@ fun PetDetailScreen(
     val recommendedWaterRations by viewModel.recommendedWaterRations.collectAsState()
     val rationsConsumedPercentage = (foodConsumed / recommendedRations) * 100
 
+    val foodProgress = if (recommendedRations > 0) foodConsumed / recommendedRations else 0f
+    val waterProgress =
+        if (recommendedWaterRations > 0) waterConsumed / recommendedWaterRations else 0f
+
     // Estado local para el TextField de distancia
     var distanceInput by remember { mutableStateOf("") }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Detalles de mascota n°$petId") })
+        TopAppBar(title = { CustomText(text = "Hola, $petName!", fontSize = 40.sp) })
     }) { innerPadding ->
         Column(
             modifier =
@@ -66,23 +71,28 @@ fun PetDetailScreen(
                     .padding(innerPadding)
                     .padding(16.dp),
         ) {
-            Text(text = "Hola, $petName!", style = MaterialTheme.typography.bodyMedium)
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Mostrar raciones recomendadas
-            Text(text = "Raciones recomendadas: $recommendedRations")
+            CustomText(
+                text = "Raciones recomendadas por día: Comida - $recommendedRations, Agua - $recommendedWaterRations",
+                fontSize = 20.sp,
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Barra de progreso para raciones consumidas
-            Text(text = "Raciones consumidas: $foodConsumed / $recommendedRations")
+            CustomText(
+                text = "Raciones consumidas: ${foodConsumed.toInt()} / $recommendedRations",
+                fontSize = 20.sp,
+            )
             LinearProgressIndicator(
-                progress = { foodConsumed / recommendedRations },
+                progress = foodProgress.coerceIn(0f, 1f),
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .height(20.dp),
+                        .height(30.dp),
+                color = Purple1,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -94,7 +104,7 @@ fun PetDetailScreen(
                         .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = "Comida consumida: $foodConsumed")
+                CustomText(text = "Raciones de comida: ", fontSize = 20.sp)
                 Button(
                     onClick = {
                         if (foodConsumed < recommendedRations) {
@@ -104,20 +114,50 @@ fun PetDetailScreen(
                     },
                     enabled = foodConsumed < recommendedRations, // Deshabilitar si se alcanzó el límite
                     modifier = Modifier.padding(start = 8.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Purple8,
+                            contentColor = Color.White,
+                        ),
                 ) {
-                    Text(text = "Agregar ración")
+                    CustomText(text = "Agregar", fontSize = 20.sp)
+                }
+                Button(
+                    onClick = {
+                        if (foodConsumed.toInt() == recommendedRations || foodConsumed < recommendedRations) {
+                            val food = -1
+                            viewModel.updateFoodConsumed(food)
+                        }
+                    },
+                    enabled = foodConsumed <= recommendedRations && foodConsumed.toInt() != 0,
+                    modifier =
+                        Modifier
+                            .padding(start = 8.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Purple8,
+                            contentColor = Color.White,
+                        ),
+                ) {
+                    CustomText(text = "Quitar", fontSize = 20.sp)
                 }
             }
 
-            // Botón para agregar agua consumida
+            Spacer(modifier = Modifier.height(25.dp))
 
-            Text(text = "Raciones consumidas: $waterConsumed / $recommendedWaterRations")
+            // AGUA
+
+            CustomText(
+                text = "Raciones consumidas: ${waterConsumed.toInt()} / $recommendedWaterRations",
+                fontSize = 20.sp,
+            )
             LinearProgressIndicator(
-                progress = { waterConsumed / recommendedWaterRations },
+                progress = waterProgress.coerceIn(0f, 1f),
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .height(20.dp),
+                        .height(30.dp),
+                color = Purple1,
             )
 
             Row(
@@ -127,56 +167,101 @@ fun PetDetailScreen(
                         .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = "Registros de agua")
+                CustomText(text = "Registros de agua:", fontSize = 20.sp)
                 Button(
                     onClick = {
-                        if (waterConsumed < recommendedRations) {
+                        if (waterConsumed < recommendedWaterRations) {
                             val water = 1
                             viewModel.updateWaterConsumed(water)
                         }
                     },
-                    enabled = waterConsumed < recommendedRations,
-                    modifier = Modifier.padding(start = 8.dp),
+                    enabled = waterConsumed < recommendedWaterRations,
+                    modifier =
+                        Modifier
+                            .padding(start = 8.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Purple8,
+                            contentColor = Color.White,
+                        ),
                 ) {
-                    Text(text = "Agregar")
+                    CustomText(text = "Agregar", fontSize = 20.sp)
+                }
+
+                Button(
+                    onClick = {
+                        if (waterConsumed.toInt() ==
+                            recommendedWaterRations ||
+                            waterConsumed < recommendedWaterRations
+                        ) {
+                            val water = -1
+                            viewModel.updateWaterConsumed(water)
+                        }
+                    },
+                    enabled = waterConsumed <= recommendedWaterRations && waterConsumed.toInt() != 0,
+                    modifier =
+                        Modifier
+                            .padding(start = 8.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Purple8,
+                            contentColor = Color.White,
+                        ),
+                ) {
+                    CustomText(text = "Quitar", fontSize = 20.sp)
                 }
             }
 
+            Spacer(modifier = Modifier.height(25.dp))
+
             // Distancia recorrida de paseo
-            Row(
+            Column(
                 modifier =
                     Modifier
                         .fillMaxWidth()
+                        .wrapContentHeight()
                         .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                TextField(
+                PetInfoField(
                     value = distanceInput,
                     onValueChange = { distanceInput = it },
-                    label = { Text("Distancia de paseo (metros)") },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f),
+                    title = "Paseo (m)",
+                    keyboardType = KeyboardType.Number,
+                    modifier =
+                        Modifier
+                            .wrapContentHeight(),
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
+                    modifier =
+                        Modifier
+                            .padding(start = 8.dp)
+                            .fillMaxWidth(),
                     onClick = {
                         val distance = distanceInput.toFloatOrNull() ?: 0f
                         viewModel.updateDistanceWalked(distance)
                         distanceInput = "" // Limpiar el input después de actualizar
                     },
-                    modifier = Modifier.padding(start = 8.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Purple8,
+                        ),
                 ) {
-                    Text(text = "+")
+                    CustomText(text = "Registrar paseo", fontSize = 20.sp)
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Mostrar la distancia total recorrida
-            Text(text = "Distancia total recorrida: $distanceWalked metros")
+            CustomText(text = "Distancia total recorrida: $distanceWalked metros", fontSize = 25.sp)
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Divider()
+            HorizontalDivider()
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -185,12 +270,17 @@ fun PetDetailScreen(
             Text(text = "Raciones de agua: $waterConsumed")
             Text(text = "Distancia recorrida: $distanceWalked")
              */
+
             Button(
                 onClick = {
                     viewModel.saveData(petId)
                     onSaveButtonClick()
                 },
                 modifier = Modifier.width(300.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = Purple8,
+                    ),
             ) {
                 CustomText(
                     text = "Guardar Datos",

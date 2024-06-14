@@ -1,5 +1,6 @@
 package ar.edu.unlam.mobile.scaffolding.ui.screens
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.data.local.pets
@@ -15,7 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PetDetailViewModel
     @Inject
-    constructor(private val petUseCases: PetUseCases) : ViewModel() {
+    constructor(
+        private val petUseCases: PetUseCases,
+    ) : ViewModel() {
         private val _petName = MutableStateFlow("")
         private val _foodConsumed = MutableStateFlow(0f)
         private val _waterConsumed = MutableStateFlow(0f)
@@ -50,6 +53,7 @@ class PetDetailViewModel
                 // Simular la carga de datos para la mascota
                 val pet = petUseCases.getPetById(petId)
                 if (pet != null) {
+                    Log.d("PetDetailVM", "Pet detail cargado: $pet")
                     _petName.value = pet.name
                     petAge = pet.age
                     petBio = pet.bio
@@ -58,8 +62,10 @@ class PetDetailViewModel
                     _waterConsumed.value = pet.waterConsumer
                     _distanceWalked.value = pet.distanceWalked
                     _recommendedRations.value = calculateRecommendedRations(pet.weight)
-                    _recommendedWaterRations.value = calculateRecommendedRations(pet.weight)
+                    _recommendedWaterRations.value = calculateRecommendedWaterRations(pet.weight)
                     resetDailyValuesAtMidnight()
+                } else {
+                    Log.e("PetDetailVM", "Pet no encontrado $petId")
                 }
             }
         }
