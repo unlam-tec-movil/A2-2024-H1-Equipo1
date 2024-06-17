@@ -174,6 +174,7 @@ class HomeViewModel
                 message.contains("Evitá pasear entre las 11AM y las 5PM") -> Color.Red
                 message.contains("Hace calor, pero no está tan agresivo el sol. Realizá un paseo corto y llevá agua.")
                 -> Color.Yellow
+
                 message.contains("¡Es un día ideal para pasear!") -> Color.Green
                 message.contains("Realizá un paseo corto, puede llegar a llover.") -> Color.Yellow
                 message.contains("Hace frío, pero podés pasear un rato. Está despejado.") -> Color.Cyan

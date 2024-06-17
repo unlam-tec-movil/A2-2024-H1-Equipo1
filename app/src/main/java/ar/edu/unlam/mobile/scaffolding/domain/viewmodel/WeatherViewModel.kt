@@ -23,7 +23,11 @@ class WeatherViewModel
         fun fetchCurrentWeather() {
             viewModelScope.launch {
                 val response =
-                    repository.getCurrentWeather("-34.669635", "-58.564624", "3dc2572c03618c71960037d86b24c7d2")
+                    repository.getCurrentWeather(
+                        "-34.669635",
+                        "-58.564624",
+                        "3dc2572c03618c71960037d86b24c7d2",
+                    )
                 _currentWeather.value = response
             }
         }
