@@ -131,7 +131,7 @@ class HomeViewModel
         }
 
         fun getWeatherMessage(
-            temperature: Double,
+            temperature: Int,
             condition: String,
             humidity: Int,
             windSpeed: Double,
@@ -143,16 +143,16 @@ class HomeViewModel
                 temperature > 30 && condition.contains("Nublado") ->
                     "Hace calor, pero no está tan agresivo el sol. Realizá un paseo corto y llevá agua."
 
-                temperature in 20.0..30.0 && condition.contains("Despejado") && windSpeed < 10 ->
+                temperature in 20..30 && condition.contains("Despejado") && windSpeed < 10 ->
                     "¡Es un día ideal para pasear!"
 
-                temperature in 20.0..30.0 && condition.contains("Nublado") ->
+                temperature in 20..30 && condition.contains("Nublado") ->
                     "Realizá un paseo corto, puede llegar a llover."
 
-                temperature in 10.0..20.0 && condition.contains("Despejado") ->
+                temperature in 10..20 && condition.contains("Despejado") ->
                     "Hace frío, pero podés pasear un rato. Está despejado."
 
-                temperature in 10.0..20.0 && condition.contains("Nublado") ->
+                temperature in 10..20 && condition.contains("Nublado") ->
                     "Hace frío y está nublado. Intentá evitar los paseos largos."
 
                 condition.contains("Lluvia") || condition.contains("Nieve") ->

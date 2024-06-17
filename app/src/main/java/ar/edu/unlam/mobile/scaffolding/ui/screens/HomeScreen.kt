@@ -46,6 +46,7 @@ import ar.edu.unlam.mobile.scaffolding.ui.components.DeleteButton
 import ar.edu.unlam.mobile.scaffolding.ui.components.PetCard
 import ar.edu.unlam.mobile.scaffolding.ui.components.SelectCircle
 import coil.compose.rememberAsyncImagePainter
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -177,7 +178,7 @@ fun WeatherDisplay(
     viewModel: HomeViewModel,
 ) {
     weatherState?.let { weatherResponse ->
-        val temperature = weatherResponse.main.temp.toCelsius()
+        val temperature = roundTemperature(weatherResponse.main.temp.toCelsius())
         val condition = translateCondition(weatherResponse.weather[0].main)
         val iconUrl = "http://openweathermap.org/img/wn/${weatherResponse.weather[0].icon}.png"
 
@@ -217,4 +218,9 @@ fun WeatherDisplay(
             }
         }
     }
+}
+
+@Composable
+fun roundTemperature(temperature: Double): Int {
+    return temperature.roundToInt()
 }
