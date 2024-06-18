@@ -94,6 +94,10 @@ dependencies {
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
+    // IconWeather
+    implementation(libs.weather.icons)
+    implementation(libs.iconics.core)
+
     androidTestImplementation(libs.google.dagger.hilt.android.testing)
     testImplementation(libs.google.dagger.hilt.android.testing)
 }

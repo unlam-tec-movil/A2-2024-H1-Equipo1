@@ -9,6 +9,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.domain.model.Pet
 import ar.edu.unlam.mobile.scaffolding.domain.services.PetService
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherCould
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherCouldCool
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherHot
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherIdeal
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherRain
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherStorm
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherSunny
+import ar.edu.unlam.mobile.scaffolding.ui.theme.WeatherSunnyCool
+import com.mikepenz.iconics.typeface.library.weathericons.WeatherIcons
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -131,56 +140,78 @@ class HomeViewModel
         }
 
         fun getWeatherMessage(
-            temperature: Double,
+            temperature: Int,
             condition: String,
             humidity: Int,
             windSpeed: Double,
         ): String =
             when {
                 temperature > 30 && condition.contains("Despejado") && humidity < 50 ->
-                    "Evitá pasear entre las 11AM y las 5PM. Hidratá a tus mascotas."
+                    "Evitá pasear entre las 11AM y las 5PM. \nHidratá a tus mascotas."
 
                 temperature > 30 && condition.contains("Nublado") ->
-                    "Hace calor, pero no está tan agresivo el sol. Realizá un paseo corto y llevá agua."
+                    "Hace calor, pero no está tan agresivo el sol. \nRealizá un paseo corto y llevá agua."
 
-                temperature in 20.0..30.0 && condition.contains("Despejado") && windSpeed < 10 ->
+                temperature in 20..30 && condition.contains("Despejado") && windSpeed < 10 ->
                     "¡Es un día ideal para pasear!"
 
-                temperature in 20.0..30.0 && condition.contains("Nublado") ->
+                temperature in 20..30 && condition.contains("Nublado") ->
                     "Realizá un paseo corto, puede llegar a llover."
 
-                temperature in 10.0..20.0 && condition.contains("Despejado") ->
+                temperature in 10..20 && condition.contains("Despejado") ->
                     "Hace frío, pero podés pasear un rato. Está despejado."
 
-                temperature in 10.0..20.0 && condition.contains("Nublado") ->
-                    "Hace frío y está nublado. Intentá evitar los paseos largos."
+                temperature in 10..20 && condition.contains("Nublado") ->
+                    "Hace frío y está nublado. \nIntentá evitar los paseos largos."
 
                 condition.contains("Lluvia") || condition.contains("Nieve") ->
-                    "Recomendamos no pasear ahora. Posponé el paseo por un rato."
+                    "Recomendamos no pasear ahora. \nPosponé el paseo por un rato."
 
                 condition.contains("Tormenta") ->
                     "No salgas y mantené a tus mascotas dentro."
 
                 windSpeed > 30 ->
-                    "Vientos fuertes detectados. Evitá pasear para evitar accidentes."
+                    "Vientos fuertes detectados. \nEvitá pasear para evitar accidentes."
 
                 else ->
-                    "Condiciones climáticas no reconocidas. Procede con precaución."
+                    "Condiciones climáticas no reconocidas. \nProcede con precaución."
             }
+
+        @Composable
+        fun getWeatherEmoji(keyWeather: String): WeatherIcons.Icon {
+            val weatherIcon =
+                when {
+                    keyWeather.contains("Despejado") -> WeatherIcons.Icon.wic_day_sunny
+
+                    keyWeather == "Nublado" -> WeatherIcons.Icon.wic_day_cloudy
+
+                    keyWeather == "Lluvia" -> WeatherIcons.Icon.wic_day_rain
+
+                    keyWeather == "Nieve" -> WeatherIcons.Icon.wic_day_snow
+
+                    keyWeather == "Tormenta" -> WeatherIcons.Icon.wic_day_storm_showers
+
+                    keyWeather == "Ventoso" -> WeatherIcons.Icon.wic_day_windy
+
+                    else ->
+                        WeatherIcons.Icon.wic_alien
+                }
+            return weatherIcon
+        }
 
         @Composable
         fun getMessageBackgroundColor(message: String): Color =
             when {
-                message.contains("Evitá pasear entre las 11AM y las 5PM") -> Color.Red
+                message.contains("Evitá pasear entre las 11AM y las 5PM") -> WeatherHot
                 message.contains("Hace calor, pero no está tan agresivo el sol. Realizá un paseo corto y llevá agua.")
-                -> Color.Yellow
+                -> WeatherSunny
 
-                message.contains("¡Es un día ideal para pasear!") -> Color.Green
-                message.contains("Realizá un paseo corto, puede llegar a llover.") -> Color.Yellow
-                message.contains("Hace frío, pero podés pasear un rato. Está despejado.") -> Color.Cyan
-                message.contains("Hace frío y está nublado. Intentá evitar los paseos largos.") -> Color.Cyan
-                message.contains("Recomendamos no pasear ahora. Posponé el paseo por un rato.") -> Color.Red
-                message.contains("No salgas y mantené a tus mascotas dentro.") -> Color.Red
+                message.contains("¡Es un día ideal para pasear!") -> WeatherIdeal
+                message.contains("Realizá un paseo corto, puede llegar a llover.") -> WeatherCould
+                message.contains("Hace frío, pero podés pasear un rato. Está despejado.") -> WeatherSunnyCool
+                message.contains("Hace frío y está nublado. Intentá evitar los paseos largos.") -> WeatherCouldCool
+                message.contains("Recomendamos no pasear ahora. Posponé el paseo por un rato.") -> WeatherRain
+                message.contains("No salgas y mantené a tus mascotas dentro.") -> WeatherStorm
                 message.contains("Vientos fuertes detectados. Evitá pasear para evitar accidentes.") -> Color.Magenta
                 else -> Color.Gray
             }
