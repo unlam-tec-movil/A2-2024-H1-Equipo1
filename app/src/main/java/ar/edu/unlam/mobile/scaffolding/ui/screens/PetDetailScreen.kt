@@ -53,7 +53,7 @@ fun PetDetailScreen(
     val distanceWalked by viewModel.distanceWalked.collectAsState()
     val recommendedRations by viewModel.recommendedRations.collectAsState()
     val recommendedWaterRations by viewModel.recommendedWaterRations.collectAsState()
-    val rationsConsumedPercentage = (foodConsumed / recommendedRations) * 100
+    // val rationsConsumedPercentage = (foodConsumed / recommendedRations) * 100
 
     val foodProgress = if (recommendedRations > 0) foodConsumed / recommendedRations else 0f
     val waterProgress =
@@ -87,7 +87,7 @@ fun PetDetailScreen(
                 fontSize = 20.sp,
             )
             LinearProgressIndicator(
-                progress = foodProgress.coerceIn(0f, 1f),
+                progress = { foodProgress.coerceIn(0f, 1f) },
                 modifier =
                     Modifier
                         .fillMaxWidth()
@@ -152,7 +152,7 @@ fun PetDetailScreen(
                 fontSize = 20.sp,
             )
             LinearProgressIndicator(
-                progress = waterProgress.coerceIn(0f, 1f),
+                progress = { waterProgress.coerceIn(0f, 1f) },
                 modifier =
                     Modifier
                         .fillMaxWidth()
