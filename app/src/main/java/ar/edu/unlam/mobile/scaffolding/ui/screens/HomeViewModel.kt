@@ -159,7 +159,7 @@ class HomeViewModel
                     "Realizá un paseo corto, puede llegar a llover."
 
                 temperature in 10..20 && condition.contains("Despejado") ->
-                    "Hace frío, pero podés pasear un rato. Está despejado."
+                    "Hace frío, pero podés pasear un rato. \nEstá despejado."
 
                 temperature in 10..20 && condition.contains("Nublado") ->
                     "Hace frío y está nublado. \nIntentá evitar los paseos largos."
@@ -183,15 +183,15 @@ class HomeViewModel
                 when {
                     keyWeather.contains("Despejado") -> WeatherIcons.Icon.wic_day_sunny
 
-                    keyWeather == "Nublado" -> WeatherIcons.Icon.wic_day_cloudy
+                    keyWeather.contains("Nublado") -> WeatherIcons.Icon.wic_day_cloudy
 
-                    keyWeather == "Lluvia" -> WeatherIcons.Icon.wic_day_rain
+                    keyWeather.contains("Lluvia") -> WeatherIcons.Icon.wic_day_rain
 
-                    keyWeather == "Nieve" -> WeatherIcons.Icon.wic_day_snow
+                    keyWeather.contains("Nieve") -> WeatherIcons.Icon.wic_day_snow
 
-                    keyWeather == "Tormenta" -> WeatherIcons.Icon.wic_day_storm_showers
+                    keyWeather.contains("Tormenta") -> WeatherIcons.Icon.wic_day_storm_showers
 
-                    keyWeather == "Ventoso" -> WeatherIcons.Icon.wic_day_windy
+                    keyWeather.contains("Ventoso") -> WeatherIcons.Icon.wic_day_windy
 
                     else ->
                         WeatherIcons.Icon.wic_alien
