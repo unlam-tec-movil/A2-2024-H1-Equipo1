@@ -164,7 +164,6 @@ class HomeViewModel
                 temperature in 10..20 && condition.contains("Nublado") ->
                     "Hace frío y está nublado. \nIntentá evitar los paseos largos."
 
-
                 condition.contains("Lluvia") || condition.contains("Nieve") ->
                     "Recomendamos no pasear ahora. \nPosponé el paseo por un rato."
 
